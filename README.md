@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # BusTrack — Startup Guide
 
 ## Quick Start
@@ -114,3 +115,6 @@ bus-tracker/
     │   └── routes/      ← ProtectedRoute
     └── index.html
 ```
+=======
+# BUS_TRACKING_SYSTEM
+>>>>>>> 578d60b3086d936b1778a7dcc976149cbd6b5227
