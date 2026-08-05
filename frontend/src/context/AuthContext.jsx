@@ -12,16 +12,22 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token    = localStorage.getItem('bustrack_token')
     const userData = localStorage.getItem('bustrack_user')
+
     if (token && userData) {
       try {
-        setUser(JSON.parse(userData))
-        // Optionally verify token is still valid
+        // Immediately set user from cache so app loads fast
+        const cachedUser = JSON.parse(userData)
+        setUser(cachedUser)
+
+        // Verify token in background — if it fails, keep cache (don't log out)
         getMe()
-          .then(res => setUser(res.data.user))
+          .then(res => {
+            if (res.data?.user) setUser(res.data.user)
+          })
           .catch(() => {
-            localStorage.removeItem('bustrack_token')
-            localStorage.removeItem('bustrack_user')
-            setUser(null)
+            // Token verify failed but we keep cached user
+            // Only clear if token truly expired (401 handled in axios interceptor)
+            console.warn('Token verify failed — using cached session')
           })
           .finally(() => setLoading(false))
       } catch {
@@ -32,18 +38,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, [])
 
-  const login = async (email, password, remember = false) => {
+  const login = async (email, password) => {
     const res = await loginApi({ email, password })
     const { token, user: userData } = res.data
 
-    if (remember) {
-      localStorage.setItem('bustrack_token', token)
-      localStorage.setItem('bustrack_user', JSON.stringify(userData))
-    } else {
-      localStorage.setItem('bustrack_token', token)
-      localStorage.setItem('bustrack_user', JSON.stringify(userData))
-    }
-
+    localStorage.setItem('bustrack_token', token)
+    localStorage.setItem('bustrack_user', JSON.stringify(userData))
     setUser(userData)
     return userData
   }
