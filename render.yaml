@@ -36,3 +36,7 @@ services:
           name: bus-tracking-backend
           type: web
           property: host
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
