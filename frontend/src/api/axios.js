@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://bus-tracking-system-backend-1zu0.onrender.com/api',
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
   timeout: 15000,
 })

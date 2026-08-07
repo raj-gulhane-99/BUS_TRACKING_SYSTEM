@@ -18,6 +18,17 @@ export default function Login() {
 
   const roleHome = { admin: '/admin', driver: '/driver', student: '/student' }
 
+  // ── Quick fill credentials on button click ──────────────────────
+  const fillDemo = (role) => {
+    const creds = {
+      admin:   { email: 'admin@school.edu',   password: 'admin123'   },
+      driver:  { email: 'driver1@school.edu', password: 'driver123'  },
+      student: { email: 'aarav@student.edu',  password: 'student123' },
+    }
+    setEmail(creds[role].email)
+    setPassword(creds[role].password)
+  }
+
   // ── Login handler ───────────────────────────────────────────────
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -120,8 +131,27 @@ export default function Login() {
           </div>
 
           <div className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
-            <h2 className="text-2xl font-bold text-slate-800 mb-1">Welcome back</h2>
-            <p className="text-slate-500 text-sm mb-5">Sign in to your account to continue</p>
+            {/* ── Role Quick Login Buttons ── */}
+            <div className="mb-6">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Quick Login</p>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { role: 'admin',   label: '👑 Admin',   cls: 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 hover:border-blue-400'     },
+                  { role: 'driver',  label: '🚌 Driver',  cls: 'bg-purple-50 border-purple-200 text-purple-700 hover:bg-purple-100 hover:border-purple-400' },
+                  { role: 'student', label: '🎓 Student', cls: 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100 hover:border-green-400'   },
+                ].map(({ role, label, cls }) => (
+                  <button
+                    key={role}
+                    type="button"
+                    id={`quick-${role}`}
+                    onClick={() => fillDemo(role)}
+                    className={`py-2.5 px-2 rounded-xl text-xs font-bold border-2 transition-all duration-200 ${cls}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
 
